@@ -84,19 +84,20 @@ def player_stats string
 end
 
 def big_shoe_rebounds
-shoe_sizes = []
-player = nil
+  biggest_shoe = 0
+  # shoe_sizes = []
+  player = nil
 
   game_hash.values.each { |team|
-    biggest_shoe = team[:players].each { |player, stat|
-      shoe_sizes << stat[:shoe]
+    team[:players].each { |player, stat|
+      # shoe_sizes << stat[:shoe]
+      if biggest_shoe < stat[:shoe]; biggest_shoe = stat[:shoe] end
     }
   }
 
-biggest_shoe = shoe_sizes.max(1)
+  # biggest_shoe = shoe_sizes.max(1)
 
-team = game_hash.select { |k,v| v[:players].select { |k,v| if v[:shoe] == biggest_shoe[0]; player = v end } }
-# player = game_hash[team][:players].select { |k,v| v[:shoe] == biggest_shoe[0] }.keys[0]
+  team = game_hash.select { |k,v| v[:players].select { |k,v| if v[:shoe] == biggest_shoe; player = v end } }
 
-player[:rebounds]
+  player[:rebounds]
 end
