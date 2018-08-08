@@ -47,24 +47,26 @@ def game_hash
   }
 end
 
+
 # ///////////  utils  ///////////
   def get_team string
     team = game_hash.select { |k,v| v[:team_name].include? string}.keys[0]
   end
 
-  def get_team_by_player_stats string
+  def get_team_by_player string
     team = game_hash.select { |k,v| v[:players].include? string}.keys[0]
   end
+
 
 # ///////////  stats  ///////////
 def num_points_scored string
 
-  game_hash[get_team_by_player_stats(string)][:players][string][:points]
+  game_hash[get_team_by_player(string)][:players][string][:points]
 end
 
 def shoe_size string
 
-  game_hash[get_team_by_player_stats(string)][:players][string][:shoe]
+  game_hash[get_team_by_player(string)][:players][string][:shoe]
 end
 
 def team_colors string
@@ -87,7 +89,7 @@ def player_stats string
   # team = game_hash.select { |k,v| v[:players].include? string }.keys[0]
 # binding.pry
 
-  game_hash[get_team_by_player_stats(string)][:players][string]
+  game_hash[get_team_by_player(string)][:players][string]
 end
 
 def big_shoe_rebounds
