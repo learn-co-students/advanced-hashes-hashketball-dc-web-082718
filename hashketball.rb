@@ -47,40 +47,47 @@ def game_hash
   }
 end
 
-def num_points_scored string
-  team = game_hash.select { |k,v| v[:players].include? string}.keys[0]
+# ///////////  utils  ///////////
+  def get_team string
+    team = game_hash.select { |k,v| v[:team_name].include? string}.keys[0]
+  end
 
-  game_hash[team][:players][string][:points]
+  def get_team_by_player_stats string
+    team = game_hash.select { |k,v| v[:players].include? string}.keys[0]
+  end
+
+# ///////////  stats  ///////////
+def num_points_scored string
+
+  game_hash[get_team_by_player_stats(string)][:players][string][:points]
 end
 
 def shoe_size string
-  team = game_hash.select { |k,v| v[:players].include? string}.keys[0]
 
-  game_hash[team][:players][string][:shoe]
+  game_hash[get_team_by_player_stats(string)][:players][string][:shoe]
 end
 
 def team_colors string
-  team = game_hash.select { |k,v| v[:team_name].include? string}.keys[0]
+  # team = game_hash.select { |k,v| v[:team_name].include? string}.keys[0]
 
-  game_hash[team][:colors]
+  game_hash[get_team(string)][:colors]
 end
 
 def team_names
   game_hash.collect { |k, v| v[:team_name] }
-
 end
 
 def player_numbers string
-  team = game_hash.select { |k,v| v[:team_name].include? string}.keys[0]
+  # team = game_hash.select { |k,v| v[:team_name].include? string}.keys[0]
 
-  game_hash[team][:players].values.collect { |player| player[:number] }
+  game_hash[get_team(string)][:players].values.collect { |player| player[:number] }
 end
 
 def player_stats string
-  team = game_hash.select { |k,v| v[:players].include? string }.keys[0]
+  # team = game_hash.select { |k,v| v[:players].include? string }.keys[0]
 # binding.pry
 
-  game_hash[team][:players][string]
+  game_hash[get_team_by_player_stats(string)][:players][string]
 end
 
 def big_shoe_rebounds
@@ -97,7 +104,10 @@ def big_shoe_rebounds
 
   # biggest_shoe = shoe_sizes.max(1)
 
-  team = game_hash.select { |k,v| v[:players].select { |k,v| if v[:shoe] == biggest_shoe; player = v end } }
+  game_hash.select { |k,v| v[:players].select { |k,v| if v[:shoe] == biggest_shoe; player = v end } }
 
   player[:rebounds]
 end
+
+# binding.pry
+# puts "end"
