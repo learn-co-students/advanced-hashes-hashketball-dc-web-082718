@@ -289,3 +289,31 @@ def player_with_longest_name
   end
   ans    
 end
+
+def long_name_steals_a_ton?
+  ans = ""
+  array_namelength = []
+  array_steals = []
+  
+    game_hash.each do |location, team_data|
+      team_data.each do |team_info, roster|
+        if roster.is_a?(Hash)
+          roster.each do |player_name, gen_stats|
+            array_steals.push(roster[:steals])
+            array_steals.sort!
+            
+            array_namelength.push(player_name.length)
+            array_namelength.sort!
+          if player_name.length == array_namelength[-1]
+            ans = roster[:steals]
+          end
+        end
+      end
+    end
+  end
+  if ans == array_steals[-1]
+    true 
+  else 
+    false 
+  end
+end
