@@ -206,7 +206,7 @@ end
 
 def big_shoe_rebounds
   array = []
-  ans = 1
+  ans = ""
   game_hash.each do |location, team_data|
     team_data.each do |team_info, roster|
       if roster.is_a?(Hash)
@@ -223,4 +223,69 @@ def big_shoe_rebounds
     end
   end
   ans
+end
+
+def most_points_scored
+  array = []
+  ans = ""
+  game_hash.each do |location, team_data|
+    team_data.each do |team_info, roster|
+      if roster.is_a?(Hash)
+        roster.each do |player_name, gen_stats|
+          gen_stats.each do |key, value|
+            array.push(gen_stats[:points])
+            array.sort!
+            if gen_stats[:points] == array[-1]
+              ans = player_name
+            end
+          end    
+        end
+      end
+    end
+  end
+  ans
+end
+
+def winning_team
+  sum = 0
+  compare = 0
+  ans = ""
+  game_hash.each do |location, team_data|
+    team_data.each do |team_info, roster|
+      if roster.is_a?(Hash)
+        roster.each do |player_name, gen_stats|
+          gen_stats.each do |key, value|
+            sum += gen_stats[:points]
+          end
+          if sum > compare
+            compare = sum
+              if compare == sum 
+                ans = team_data[:team_name]
+              end
+          end
+        end
+        sum = 0
+      end
+    end
+  end
+  ans
+end
+
+def player_with_longest_name
+  array = []
+  ans = ""
+  game_hash.each do |location, team_data|
+    team_data.each do |team_info, roster|
+      if roster.is_a?(Hash)
+        roster.each do |player_name, gen_stats|
+          array.push(player_name.length)
+          array.sort!
+          if player_name.length == array[-1]
+            ans = player_name
+          end
+        end
+      end
+    end
+  end
+  ans    
 end
