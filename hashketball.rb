@@ -165,9 +165,7 @@ end
 def team_names
   array = []
   game_hash.each do |location, team_data|
-    team_data.each do |key, value|
-      array.push(team_data[:team_name])
-    end
+    array.push(team_data[:team_name])
   end
   array = array.uniq
 end
