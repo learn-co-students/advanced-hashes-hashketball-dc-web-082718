@@ -1,6 +1,6 @@
 require "pry"
 def game_hash
-  statHash = {
+  {
     :home => {
       :team_name => "Brooklyn Nets",
       :colors => ["Black", "White"],
@@ -116,130 +116,115 @@ def game_hash
   }
 end
 
-def num_points_scored (playerName)
-  points = 0
 
-  game_hash.each do |location, team_data|
-      team_data.each do |attribute, data|
-        if attribute == :players
-          data.each do |name, items|
-            if name == playerName
-              points = items[:points]
-
-              end
-            end
-          end
-        end
-      end
-    points
-  end
-
-def shoe_size (playerName)
-  shoeSize = 0
-
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |name, items|
-          if name == playerName
-            shoeSize = items[:shoe]
-          end
+def num_points_scored (player_name)
+  points_scored = 0
+  
+  game_hash.each do |location, team_info|
+    team_info[:players].each do |name, player_stats|
+      if name == player_name
+        player_stats.each do |skill, count|
+          points_scored = player_stats[:points]
         end
       end
     end
   end
-shoeSize
+points_scored
 end
 
 
-def team_colors (teamName)
-  teamColors = []
-
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if data == teamName
-        teamColors = team_data[:colors]
+def shoe_size (player_name)
+  shoe_size = 0
+  
+  game_hash.each do |location, team_info|
+    team_info[:players].each do |name, player_stats|
+      if name == player_name
+        player_stats.each do |skill, count|
+          shoe_size = player_stats[:shoe]
+        end
       end
     end
   end
-  teamColors
+  shoe_size
+end
+
+
+def get_team_hash (team_name)
+  team_hash = {}
+  
+  game_hash.each do |location, team_info|
+    if team_info[:team_name] == team_name
+      team_hash = team_info
+    end
+  end
+  team_hash
+end
+
+
+def team_colors (team_name)
+  colors_array = get_team_hash(team_name)[:colors]
 end
 
 def team_names
-  teamNames = []
-
-  game_hash.each do |location, team_data|
-      teamNames << team_data[:team_name]
-  end
-  teamNames
-end
-
-
-def teams
-  game_hash.values
-end
-
-def find_the_team (teamName)
-  teams.find do |team|
-    team.fetch(:team_name) == teamName
-  end
-end
-
-def player_numbers(teamName)
-  player_numbers = []
-  home = game_hash.fetch(:home)
-  away = game_hash.fetch(:away)
-
-  if home[:team_name] == teamName
-    players = home.fetch(:players)
-    players.each do |k, v|
-      v.each do |key, value|
-        if key == :number
-          player_numbers << value
-        end
+  name_array = []
+  
+  game_hash.each do |location, team_info|
+    team_info.each do |team_stat, fact|
+      if team_stat == :team_name
+        name_array << fact
       end
     end
-  elsif away[:team_name] == teamName
-    players = away.fetch(:players)
-    players.each do |k, v|
-      v.each do |key, value|
-        if key == :number
-          player_numbers << value
+  end
+  name_array
+end
+
+def player_numbers (team_name)
+  jersey_nums_array = []
+
+  get_team_hash(team_name)[:players].each do |name, player_stats|
+    jersey_nums_array << player_stats[:number]
+  end
+  jersey_nums_array
+end
+
+def player_stats (player_name)
+  stat_hash = {}
+  
+  game_hash.each do |location, team_info|
+    team_info.each do |team_stat, fact|
+      team_info[:players].each do |name, player_stats|
+        if name == player_name
+          stat_hash = player_stats
         end
       end
     end
   end
-
-  player_numbers
+  stat_hash
 end
 
 
-def player_stats (playerName)
-  stats = {}
+def player_hashes
+  game_hash[:away][:players].merge(game_hash[:home][:players])
+end
 
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |name, items|
-          if name == playerName
-            stats = items
-          end
-        end
-      end
-    end
+
+def player_names_array
+  player_names = []
+  
+  player_hashes.each do |name, player_stats|
+    player_names << name
   end
-  stats
+  player_names
 end
 
-
-def players
-  game_hash[:home][:players].merge(game_hash[:away][:players])
-end
-
-def player_biggest_shoe_size
-  players.max_by{|player, stats| stats.fetch(:shoe)}[1]
-end
 
 def big_shoe_rebounds
-  player_biggest_shoe_size.fetch(:rebounds)
+  shoes_array = []
+  
+  player_hashes.each do |name, player_stats|
+    shoes_array << player_stats[:shoe]
+  end
+  
+  biggest_shoe_player = player_names_array[shoes_array.each_with_index.max[1]]
+  player_hashes[biggest_shoe_player][:rebounds]
 end
