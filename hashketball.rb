@@ -173,16 +173,16 @@ end
 def big_shoe_rebounds
 #  shoe_array = []
   biggest = 0
+  shoe_player = ""
+  rebounds = 0
   game_hash.each do |location, team_data|
     team_data[:players].each do |player, stats|
-#      shoe_array << stats[:shoe]
-#      biggest = shoe_array.max #finds biggest shoe size
       if stats[:shoe] > biggest
         biggest = stats[:shoe]
-      end
-      if stats[:shoe] == biggest
-        return stats[:rebounds]
+        shoe_player = player
+        rebounds = team_data[:players][player][:rebounds]
       end
     end
   end
+  rebounds
 end
